@@ -1,7 +1,6 @@
 import React from 'react';
 import Grid from '../Components/Grid'
 
-
 class Main extends React.Component {
     constructor() {
         super();
@@ -13,6 +12,14 @@ class Main extends React.Component {
             generation: 0,
             gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
         }
+    }
+
+    selectBox = (row, col) => {
+        let gridCopy = arrayClone(this.state.gridFull);
+        gridCopy[row][col] = !gridCopy[row][col];
+        this.setState({
+            gridFull: gridCopy,
+        })
     }
 
     render() {
@@ -31,4 +38,9 @@ class Main extends React.Component {
         );
     }
 }
+
+function arrayClone(arr) {
+    return JSON.parse(JSON.stringify(arr));
+}
+
 export default Main;
