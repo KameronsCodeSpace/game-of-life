@@ -43,8 +43,43 @@ class Main extends React.Component {
         this.intervalId = setInterval(this.play, this.speed);
     }
 
-    pasueButton = () => {
+    pauseButton = () => {
         clearInterval(this.intervalId);
+    }
+
+    slow = () => {
+        this.speed = 1000;
+        this.playButton();
+    }
+
+    fast = () => {
+        this.speed = 100;
+        this.playButton();
+    }
+
+    clear = () => {
+        let grid = Array(this.rows).fill().map(() => Array(this.cols).fill(false));
+        this.setState({
+            gridFull: grid,
+            generation: 0,
+        });
+    }
+
+    gridSize = (size) => {
+        switch (size) {
+            case "1":
+                this.cols = 20;
+                this.rows = 10;
+            break;
+            case "2":
+                this.cols = 50;
+                this.rows = 30;
+            break;
+            case "3":
+                this.cols = 70;
+                this.rows = 50;
+        }
+        this.clear();
     }
 
     play = () => {
@@ -85,13 +120,13 @@ class Main extends React.Component {
                 <h1>Game of Life</h1>
                 <Buttons
                     playButton={this.playButton}
-                    pasueButton={this.pasueButton}
+                    pauseButton={this.pauseButton}
                     slow={this.slow}
                     fast={this.fast}
                     clear={this.clear}
                     seed={this.seed}
                     gridSize={this.gridSize}
-                    />
+                />
                 <Grid
                     gridFull={gridFull}
                     rows={this.rows}
