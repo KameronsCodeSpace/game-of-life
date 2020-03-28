@@ -1,5 +1,7 @@
 import React from 'react';
 import Grid from '../Components/Grid'
+import Buttons from '../Components/Buttons'
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Main extends React.Component {
     constructor() {
@@ -41,6 +43,10 @@ class Main extends React.Component {
         this.intervalId = setInterval(this.play, this.speed);
     }
 
+    pasueButton = () => {
+        clearInterval(this.intervalId);
+    }
+
     play = () => {
         let grid = this.state.gridFull;
         let grid2 = arrayClone(this.state.gridFull);
@@ -77,6 +83,15 @@ class Main extends React.Component {
         return (
             <div>
                 <h1>Game of Life</h1>
+                <Buttons
+                    playButton={this.playButton}
+                    pasueButton={this.pasueButton}
+                    slow={this.slow}
+                    fast={this.fast}
+                    clear={this.clear}
+                    seed={this.seed}
+                    gridSize={this.gridSize}
+                    />
                 <Grid
                     gridFull={gridFull}
                     rows={this.rows}
