@@ -28,9 +28,7 @@ class Main extends React.Component {
         let gridCopy = arrayClone(this.state.gridFull);
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
-                if (Math.floor(Math.random() * 4) === 1) {
-                    gridCopy[i][j] = true;
-                }
+                gridCopy[i][j] = Math.floor(Math.random() * 4) === 1;
             }
         }
         this.setState({
@@ -70,11 +68,11 @@ class Main extends React.Component {
             case "1":
                 this.cols = 20;
                 this.rows = 10;
-            break;
+                break;
             case "2":
                 this.cols = 50;
                 this.rows = 30;
-            break;
+                break;
             case "3":
                 this.cols = 70;
                 this.rows = 50;
@@ -83,27 +81,41 @@ class Main extends React.Component {
     }
 
     play = () => {
+        const operations = [
+            [0, 1],
+            [0, -1],
+            [1, -1],
+            [-1, 1],
+            [1, 1],
+            [-1, -1],
+            [1, 0],
+            [-1, 0]
+        ];
+
         let grid = this.state.gridFull;
-        let grid2 = arrayClone(this.state.gridFull);
+        let gridClone = arrayClone(this.state.gridFull);
 
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
-                let count = 0;
-                if (i > 0) if (grid[i - 1][j]) count++;
-                if (i > 0 && j > 0) if (grid[i - 1][j - 1]) count++;
-                if (i > 0 && j < this.cols - 1) if (grid[i][j + 1]) count++;
-                if (j > this.cols - 1) if (grid[i][j + 1]) count++;
-                if (j > 0) if (grid[i][j - 1]) count++;
-                if (i < this.rows - 1) if (grid[i + 1][j]) count++;
-                if (i < this.rows - 1 && j > 0) if (grid[i + 1][j + 1]) count++;
-                if (i < this.rows - 1 && this.cols - 1) if (grid[i + 1][j + 1]) count++;
+                let neighbors = 0;
 
-                if (grid[i][j] && (count < 2 || count > 3)) grid2[i][j] = false;
-                if (!grid[i][j] && count === 3) grid2[i][j] = true;
+                operations.forEach(([x, y]) => {
+                    const neighborI = i + x;
+                    const neighborJ = j + y;
+                    if (neighborI >= 0 && neighborI < this.rows && neighborJ >= 0 && neighborJ < this.cols) {
+                        neighbors += grid[neighborI][neighborJ]
+                    }
+                })
+                
+                if (neighbors < 2 || neighbors > 3) {
+                    gridClone[i][j] = false;
+                } else if (neighbors === 3) {
+                    gridClone[i][j] = true;
+                }
             }
         }
         this.setState({
-            gridFull: grid2,
+            gridFull: gridClone,
             generation: this.state.generation + 1
         })
     }
@@ -117,7 +129,7 @@ class Main extends React.Component {
         let { gridFull } = this.state
         return (
             <div>
-                <h1>Game of Life</h1>
+                <h1>Kameron's Game of Life</h1>
                 <Buttons
                     playButton={this.playButton}
                     pauseButton={this.pauseButton}

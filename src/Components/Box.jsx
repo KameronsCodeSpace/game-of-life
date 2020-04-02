@@ -7,7 +7,7 @@ class Box extends React.Component{
     }
     render(){
         return(
-            <div className={this.props.boxClass}
+            <div className={this.props.isOn ? "box on" : "box off"}
             id={this.props.id}
             onClick={this.selectBox}/>
         )
